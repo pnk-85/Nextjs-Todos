@@ -13,6 +13,9 @@ const TodoList = (props) => {
 
     useEffect(() => {
         setTodoList(props.todoList);
+        setTodoList((prevData) =>
+      prevData.filter((item) => item.doneTask === false)
+    );
     },[props.todoList]);
 
     const onDeleteHandler = (item) => {
@@ -21,13 +24,39 @@ const TodoList = (props) => {
         todoContext.todoRemoveList(item);
     };
 
-    const handleCheckboxChange = (id) => {
+    const handleCheckboxChange = async (item) => {
         setTodoList((prevData) => {
             prevData.map((row) => {
-                row.id === row ? {...row, doneTask: !row.doneTask} : row
+                row.id === item.id ? {...row, doneTask: !row.doneTask} : row
             })
         });
-        todoContext.todoTaskDone(id);
+        todoContext.todoTaskDone(item.id);
+
+        try {
+            const response = await fetch("/api/update-todo", {
+              method: "PUT",
+              body: JSON.stringify({
+                id: item.id,
+                todoContent: item.todoContent,
+                date: item.date,
+                doneTask: !item.doneTask,
+                key: item.key,
+              }),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+      
+            const data = await response.json();
+            console.log(data);
+      
+            // show not completed task
+            setTodoList((prevData) =>
+              prevData.filter((item) => item.doneTask === false)
+            );
+          } catch (error) {
+            console.log("error in update todo ", error);
+          }
     }
 
     return (
@@ -48,7 +77,7 @@ const TodoList = (props) => {
                         checked={item.doneTask}
                         onChange={(e) => {
                           e.stopPropagation();
-                          handleCheckboxChange(item.id);
+                          handleCheckboxChange(item);
                         }}
                       ></input>
                     </td>

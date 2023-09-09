@@ -20,7 +20,7 @@ const NewTodo = () => {
             totoContent: enteredTodo,
             date: new Date(),
             doneTask: false,
-            status : 'Incomplete'
+            // status : 'Incomplete'
         };
         props.onTodoList(todoData);
         todoctx.todoAddHandler(todoData);
