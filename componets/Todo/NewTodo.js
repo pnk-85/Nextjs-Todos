@@ -21,7 +21,7 @@ const NewTodo = () => {
             date: new Date(),
             doneTask: false
         };
-
+        props.onTodoList(todoData);
         todoctx.todoAddHandler(todoData);
     }
 
