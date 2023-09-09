@@ -1,32 +1,41 @@
-import React, { Fragment, useContext, useRef } from "react";
-import TodoContext from "../Store/TodoContext";
+import React, { Fragment, useRef } from "react";
+import { useRouter } from "next/router";
 import Card from "../UI/Card";
 import classes from './NewTodo.module.css';
 
 
 const NewTodo = () => {
 
-    const todoctx = useContext(TodoContext);
+
     const todoInputRef = useRef();
+    const router = useRouter();
 
 
-    const submitHandler = (event) =>{
+    const submitHandler = (event) => {
         event.preventdefault();
 
         const enteredTodo = todoInputRef.current.value;
 
-        const todoData = {
-            id: Math.random().toString(),
-            totoContent: enteredTodo,
-            date: new Date(),
-            doneTask: false,
-            // status : 'Incomplete'
-        };
-        props.onTodoList(todoData);
-        todoctx.todoAddHandler(todoData);
+        if (enteredTodo) {
+            const todoData = {
+                id: Math.random().toString(),
+                totoContent: enteredTodo,
+                date: new Date(),
+                doneTask: false,
+                // status : 'Incomplete'
+            };
+            props.onTodoList(todoData);
+        } else {
+            return alert('please entered todo');
+        }
+
+        router.replace('/');
+
+        todoInputRef.current.value;
+
     }
 
-    return(
+    return (
         <Fragment>
             <Card>
                 <form className={classes.form} onSubmit={submitHandler}>

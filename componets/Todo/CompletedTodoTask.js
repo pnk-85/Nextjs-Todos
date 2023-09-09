@@ -1,15 +1,21 @@
-import React, { useContext } from "react";
-import TodoContext from "../Store/TodoContext";
+import React, {useEffect, useState } from "react";
 import Card from "../UI/Card";
 import { AiFillCloseCircle } from 'react-icons/ai'
 import classes from './CompletedTodoTask.module.css';
 
 
-const CompletedTodoTask = () => {
+const CompletedTodoTask = (props) => {
 
-    const todoContext = useContext(TodoContext);
 
-    const todoListDone = todoContext.todoList.filter((item) => item.doneTask === true);
+    const [todoList, setTodoListDone] = useState(props.todoList);
+
+    useEffect(() => {
+        if(props.todoList){
+            setTodoListDone(props.todoList);
+        }
+    },[props.todoList]);
+
+    let todoListDone = todoList.filter((item) => item.doneTask === true);
 
 
     return (
@@ -21,7 +27,7 @@ const CompletedTodoTask = () => {
                         {todoListDone &&
                             todoListDone.map((item) => {
                                 return (
-                                    <tr className={classes.tr} key={item.key}>
+                                    <tr className={classes.tr} key={item.id}>
                                         <td>
                                             <input
                                                 type="checkbox"
