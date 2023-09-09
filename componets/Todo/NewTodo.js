@@ -19,7 +19,8 @@ const NewTodo = () => {
             id: Math.random().toString(),
             totoContent: enteredTodo,
             date: new Date(),
-            doneTask: false
+            doneTask: false,
+            status : 'Incomplete'
         };
         props.onTodoList(todoData);
         todoctx.todoAddHandler(todoData);
