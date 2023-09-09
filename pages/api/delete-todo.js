@@ -1,8 +1,9 @@
+
 import { MongoClient, ObjectId } from "mongodb";
 
 async function handler(req, res) {
   try {
-    if (req.method === "PUT") {
+    if (req.method === "DELETE") {
       const data = req.body;
 
       console.log("data", data);
@@ -17,22 +18,11 @@ async function handler(req, res) {
 
       const todoId = new ObjectId(data.key);
 
-      const newId = { _id: todoId };
-
-      const updateData = {
-        $set: {
-          id: data.id,
-          todoContent: data.todoContent,
-          date: data.date,
-          doneTask: data.doneTask,
-        },
-      };
-
-      const result = await todoCollections.updateOne(newId, updateData);
+      const result = await todoCollections.deleteOne({ _id: todoId });
 
       client.close();
 
-      res.status(201).json({ message: " Todo Updated " });
+      res.status(201).json({ message: " Todo Deleted Successfully " });
     }
   } catch (error) {
     console.log(error);

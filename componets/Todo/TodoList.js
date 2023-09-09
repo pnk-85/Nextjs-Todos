@@ -18,10 +18,25 @@ const TodoList = (props) => {
     );
     },[props.todoList]);
 
-    const onDeleteHandler = (item) => {
+    const onDeleteHandler = async (item) => {
         const delTodo = todoList.filter((todoItem) => todoItem.id !== item.id);
         setTodoList(delTodo);
         todoContext.todoRemoveList(item);
+
+        try {
+          const response = await fetch("/api/delete-todo", {
+            method: "DELETE",
+            body: JSON.stringify(item),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+    
+          const data = await response.json();
+          console.log(data);
+        } catch (error) {
+          console.log("Error in delete", error);
+        }
     };
 
     const handleCheckboxChange = async (item) => {
